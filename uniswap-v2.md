@@ -6,6 +6,26 @@
 
 
 
+# Constant Product Formula
+
+
+- X => Reserves of token X in Pool before swap
+- Y => Reserves of token Y in Pool before swap
+- dX => amountIn
+- dY => amountOut 
+- F => TNX fees == 0.03
+
+
+- `Before Swap`
+   **(X*Y) = K**
+- `After Swap`
+   **(X + (dX*(1-F))) * (Y - dY) = newK**
+- AMM's always follow the basic condition after swap:
+   **newK >= oldK**
+
+
+
+
 # Swapping
 
 
@@ -68,6 +88,11 @@
       **(X + (dX*(1-F))) * (Y - dY) = newK**
    - AMM's always follow the basic condition after swap:
       **newK >= oldK**
+
+
+
+
+# createpair() function
 
 
 
