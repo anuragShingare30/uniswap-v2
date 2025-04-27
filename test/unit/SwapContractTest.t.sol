@@ -20,12 +20,18 @@ contract SwapContractTest is Test{
 
 
     function setUp() public {
+        // Fund WETH to user
         vm.deal(USER, 100*1e18);
         vm.startPrank(USER);
         weth.deposit{value:100*1e18}();
         weth.approve(address(router), type(uint256).max);
         vm.stopPrank();
 
+        // Fund DAI to user
+        deal(DAI,USER, 100000*1e18);
+        vm.startPrank(USER);
+        dai.approve(address(router), type(uint256).max);
+        vm.stopPrank();
     }
 
     /**
