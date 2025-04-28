@@ -92,7 +92,27 @@
 
 
 
-# createpair() function
+# Create token pool
+
+
+1. **createPair()**:
+   - This function helps to create the token pair for provided X/Y tokens.
+   - `createPair()` is useful during adding liquidity. If pair not exist already this function will create the pair address for tokens
+
+
+2. **getpair()**:
+   - This function returns the address of the token pair
+   - If pair not exist returns `address(0)`
+
+
+
+# Adding Liquidity
+
+- `Liquidity` in Uniswap V2 is just the supply of two tokens(X and Y) sitting inside a pool, making it possible for people to swap tokens easily and fairly.
+- The pool automatically adjusts prices using the `constant product formula (x * y = k)`
+
+
+
 
 
 

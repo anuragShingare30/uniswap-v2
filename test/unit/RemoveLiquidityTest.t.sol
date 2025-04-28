@@ -83,7 +83,8 @@ contract RemoveLiquidityTest is Test{
         console.log("Liquidity before removing:",liquidity);
         console.log("Amount of DAI to be Added:",X);
         console.log("Amount of WETH to be Added:",Y);
-
+        console.log("User LP tokens before:", pair.balanceOf(USER));
+        
         vm.roll(block.number + 1000);
         vm.warp(block.timestamp + 1000);
 
@@ -103,6 +104,7 @@ contract RemoveLiquidityTest is Test{
         console.log("amount of DAI to be removed:", dX);
         console.log("amount of WETH to be removed:",dY);
         console.log("Liquidity after removing:",liquidity);
+        console.log("User LP tokens after:", pair.balanceOf(USER));
     }   
 
 
