@@ -48,7 +48,7 @@ contract AddLiquidityTest is Test{
         vm.stopPrank();
     }
     
-    function test_checkWhetherPairExists() public {
+    function test_checkWhetherPairExists_AddLiquidity() public {
         console.log("User DAI balance:",dai.balanceOf(USER));
         console.log("User WETH balance:",weth.balanceOf(USER));
         
