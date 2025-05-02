@@ -11,15 +11,14 @@ import {IUniswapV2Pair} from "lib/v2-core/contracts/interfaces/IUniswapV2Pair.so
 contract TestUniswapFlashSwap is Test {
     IWeth public constant weth = IWeth(WETH);
     IERC20 public constant dai = IERC20(DAI);
-    IUniswapV2Pair public constant pair = IUniswapV2Pair(UNISWAP_V2_PAIR_DAI_WETH);
     UniswapFlashSwap public flashswap;
 
     address public USER = makeAddr("USER");
     uint256 public constant amount = 1000 * 1e18;
 
     function setUp() public {
-        flashswap = new UniswapFlashSwap();
-        
+        flashswap = new UniswapFlashSwap(UNISWAP_V2_PAIR_DAI_WETH);
+
         // Fund user with ETH and convert to WETH
         vm.deal(USER, amount * 2); // Give extra for fees
         vm.startPrank(USER);
@@ -35,14 +34,16 @@ contract TestUniswapFlashSwap is Test {
 
     function test_checkFlashSwap() public {
         console.log("WETH balance of USER:", weth.balanceOf(USER));
-        
 
         uint256 amountToBorrow = 1000 * 1e18;
         vm.startPrank(USER);
-        flashswap.flashswap(address(weth), amountToBorrow);
+        flashswap.flashswap(WETH, amountToBorrow);
         vm.stopPrank();
-        
+
         uint256 amountToRepay = flashswap.amountToRepay();
+        uint256 fee = (amountToBorrow * 3) / 997 + 1;
+        console.log("Amount Borrowed:", amountToBorrow);
+        console.log("Fee:", fee);
         console.log("Amount to repay:", amountToRepay);
         assertGt(amountToRepay, amountToBorrow);
     }

@@ -106,11 +106,13 @@
 
 
 
-# Adding Liquidity
+# Add Liquidity
 
-- `Liquidity` in Uniswap V2 is just the supply of two tokens(X and Y) sitting inside a pool, making it possible for people to swap tokens easily and fairly.
-- The pool automatically adjusts prices using the `constant product formula (x * y = k)`
+# Remove Liquidity
 
+# Flash Swap
+
+# Arbitrage
 
 
 
