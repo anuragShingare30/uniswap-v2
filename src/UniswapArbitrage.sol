@@ -5,8 +5,9 @@ import {IERC20} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol
 import {SafeERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/utils/SafeERC20.sol";
 import {IUniswapV2Router02} from "lib/v2-periphery/contracts/interfaces/IUniswapV2Router02.sol";
 import {IUniswapV2Pair} from "lib/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
+import {IUniswapV2Callee} from "lib/v2-core/contracts/interfaces/IUniswapV2Callee.sol";
 
-contract UniswapArbitrage {
+contract UniswapArbitrage is IUniswapV2Callee {
     using SafeERC20 for IERC20;
 
     error UniswapArbitrage_InsufficientProfit();
@@ -63,11 +64,11 @@ contract UniswapArbitrage {
 
         (uint256 amount0Out, uint256 amount1Out) = isToken0 ? (amountIn, uint256(0)) : (uint256(0), amountIn);
 
-        // call the swap function
+        // call the swap function -> To initiate the flashswap
         IUniswapV2Pair(pair).swap(amount0Out, amount1Out, address(this), data);
     }
 
-    function uniswapV2Call(address sender, uint256 amount0Out, uint256 amount1Out, bytes calldata data) external {
+    function uniswapV2Call(address sender, uint256 amount0Out, uint256 amount1Out, bytes calldata data) external override {
         // decode the data
         (
             address pair,
@@ -80,24 +81,27 @@ contract UniswapArbitrage {
             uint256 minProfit
         ) = abi.decode(data, (address, address, address, address, address, address, uint256, uint256));
 
-        // Determine the amount you get from arbitrage
-        uint256 amountOut = _swap(router0, router1, tokenIn, tokenOut, amountIn);
+        // Verify the caller is the pair contract
+        require(msg.sender == pair, "UniswapArbitrage: INVALID_CALLER");
 
+        // Calculate the fee
         uint256 amountBorrowed = amountIn;
         uint256 fee = ((amountBorrowed * 3) / 997) + 1;
-
         uint256 amountToRepay = amountBorrowed + fee;
+
+        // First perform the arbitrage to get the tokens
+        uint256 amountOut = _swap(router0, router1, tokenIn, tokenOut, amountIn);
         uint256 profit = amountOut - amountToRepay;
 
         if (profit < minProfit) {
             revert UniswapArbitrage_InsufficientProfit_FlashSwap();
         }
 
+        // Now that we have the tokens, repay the pair
+        IERC20(tokenIn).safeTransfer(pair, amountToRepay);
+
         // Transfer the profit to caller
         IERC20(tokenIn).safeTransfer(caller, profit);
-
-        // Repay the flashswap
-        IERC20(tokenIn).safeTransfer(pair, amountToRepay);
     }
 
     // Internal functions
@@ -130,7 +134,7 @@ contract UniswapArbitrage {
         path[0] = tokenOut; // WETH
         path[1] = tokenIn; // DAI
 
-        uint256[] memory amounts2 = IUniswapV2Router02(router1).swapExactTokensForTokens({
+        amounts = IUniswapV2Router02(router1).swapExactTokensForTokens({
             amountIn: amounts[1],
             amountOutMin: amountIn,
             path: path,
@@ -138,6 +142,6 @@ contract UniswapArbitrage {
             deadline: block.timestamp
         });
 
-        amountOut = amounts2[1]; // DAI
+        amountOut = amounts[1]; // DAI amount out
     }
 }

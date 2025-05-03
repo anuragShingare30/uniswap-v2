@@ -92,6 +92,7 @@
 
 
 
+
 # Create token pool
 
 
@@ -106,15 +107,105 @@
 
 
 
+
 # Add Liquidity
+
+**`Note`**:
+   - Price of AMM(before) == Price of AMM(after)
+   - `applicable for both adding and removing liquidity`
+
+
+- A liquidity provider (LP) adds equal value of two tokens (say ETH and DAI) to a Uniswap V2 pair contract.
+- In return, they receive LP tokens, which represent their share in the pool.
+- **Concepts**: `constant product formula, LP tokens, spot price ratio`
+
+
+**Flow of adding Liquidity**:
+1. User calls `addLiquidity()` from router contract
+2. Router contract checks whether pair exist or not `getPair()`. If not they will create pair for tokens(X and Y) `createPair()`
+3. User will transfer (X n Y) tokens in `equal ratio` to pair contract
+4. Here, we will follow `constant product formula` and `spot price ratio` concept to determine the ratio and reserves of tokens in pair contract
+5. Router contract will call `mint()`
+6. Upon calling mint(), pair contract will transfer `LP tokens` to user
+7. **`LP tokens`** -> Keeps the track of liquidity provided by provider `and` Represent ownership in pair contract
+
+
+
 
 # Remove Liquidity
 
+**`Note`**:
+   - Price of AMM(before) == Price of AMM(after)
+
+- The Liquidity provider redeems their/burn `LP tokens` to withdraw their share of the pool’s tokens.
+
+
+**flow of removing liquidity:**
+1. User call `removeLiquidity()` from router contract
+2. User will `transfer/burn LP tokens` to tokens pair contract
+3. Router will call `burn()` function
+4. Pair contract will `transfer() X and Y tokens` to user
+
+
+
+
+
 # Flash Swap
 
-# Arbitrage
+- **Note: Borrowed amount of token should be repaid including fee to pair contract**
+- You can borrow tokens from a Uniswap V2 pool for free, use them for something in the same transaction, and then return them (with fees) — all in one block.
+
+- Here, we execute `swap()` and pass `data parameters` to init the `flashswap`.
 
 
+**flow of flashswap**:
+1. When we call `swap()` pass `data params` with some encoded data to init `flashswap`
+2. During `flashswap` -> amount to borrowed should be mention and amount not borrowed should be zero
+3. Call `swap(amount,0) from pair contract` to init `flashswap`
+4. Calculate the `fee and amountToRepay`
+
+```solidity
+// Determine the amount borrowed
+uint256 amountBorrowed = token == token0 ? amount0 : amount1;
+
+// calculate flash swap fee
+uint256 fee = ((amountBorrowed * 3) / 997) + 1;
+
+// calculate the amount to repay
+uint256 amountToRepay = amountBorrowed + fee;
+
+```
+
+5. Transfer the `amountToRepay` to pair contract
+
+
+
+
+
+# Arbitrage (Uniswap and Sushiswap v2 protocol)
+
+- Arbitrage can be performed by -> `swap and flashswap` mechanism
+- Check the same token amount on different protocol (Uniswap and Sushiswap)
+
+
+**Flow of Arbitrage on (Uniswap and Sushiswap):**
+1. Borrow 3000 DAI from `DAI/MKR pair contract`
+2. Swap 3000 DAI for WETH from `DAI/WETH pair contract from Uniswap`
+3. Swap WETH for 3100 DAI from `DAI/WETH pair contract from sushiswap`
+4. Repay the borrowed amount to `DAI/MKR pair contract including fee`
+5. Calculate the profit gain
+
+
+
+```solidity
+uint256 amountBorrowed = 3000 DAI
+
+uint256 amountFromSwap = 3100 DAI
+
+uint256 amountToRepay = amountBorrowed + fee = 3010 DAI
+
+uint256 profit = amountFromSwap - amountToRepay = 90 DAI
+```
 
 
 

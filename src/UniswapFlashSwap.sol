@@ -80,7 +80,7 @@ contract UniswapFlashSwap {
         // Transfer flash swap fee from caller to this contract
         IERC20(token).safeTransferFrom(caller, address(this), fee);
 
-        // Repay to pair contract
+        // Transfer amountToRepay to pair contract
         IERC20(token).safeTransfer(address(pair), amountToRepay);
     }
 }
