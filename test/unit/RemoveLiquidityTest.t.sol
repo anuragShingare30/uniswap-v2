@@ -10,6 +10,13 @@ import {IERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.so
 import {DAI, WETH, MKR, UNISWAP_V2_ROUTER_02, UNISWAP_V2_PAIR_DAI_WETH, UNISWAP_V2_FACTORY} from "src/constants.sol";
 import {MyToken} from "src/ERC20.sol";
 
+/**
+ * @title RemoveLiquidityTest
+ * @author anurag Shingare
+ * @notice This contract is testing the remove liquidity function for pair DAI-WETH and DAI-Token
+        1. removeLiquidity()
+ */
+
 contract RemoveLiquidityTest is Test {
     IWeth public constant weth = IWeth(WETH);
     IERC20 public constant dai = IERC20(DAI);

@@ -11,6 +11,16 @@ import {
 } from "src/constants.sol";
 import {UniswapArbitrage} from "src/UniswapArbitrage.sol";
 
+/**
+ * @title TestUniswapArbitrage
+ * @author anurag Shingare
+ * @notice This contract is testing the arbitrage function for pair DAI-WETH
+ * Here we will test the function:
+    * 1. swap()
+    * 2. flashSwap()    
+    * 3. uniswapV2Call()
+ */
+
 contract TestUniswapArbitrage is Test {
     IUniswapV2Router02 public constant router0 = IUniswapV2Router02(UNISWAP_V2_ROUTER_02); // Uniswap DAI/WETH
     IUniswapV2Router02 public constant router1 = IUniswapV2Router02(SUSHISWAP_V2_ROUTER_02); // Sushiswap DAI/WETH

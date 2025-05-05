@@ -7,6 +7,25 @@ import {IUniswapV2Router02} from "lib/v2-periphery/contracts/interfaces/IUniswap
 import {IUniswapV2Pair} from "lib/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import {IUniswapV2Callee} from "lib/v2-core/contracts/interfaces/IUniswapV2Callee.sol";
 
+/**
+ @title UniswapArbitrage contract
+ @author anurag Shingare
+ @notice This contract is performing the arbitrage between Uniswap and Sushiswap
+ @dev This contract is using the flashswap to perform the arbitrage
+
+ @dev We can perform the arbitrage by two ways:
+    1. Swap function:
+        * Function performs arbitrage between Uniswap and Sushiswap
+        * Function performs two swaps:
+        *         1. Swap DAI to WETH
+        *         2. Swap WETH to DAI
+    2. FlashSwap function: 
+        * Function borrows the tokens from pair contract by flashswap
+        * Then perform the arbitrage between Uniswap and Sushiswap
+        * After performing the arbitrage, repay the borrowed tokens to pair contract including fee!!!
+ */
+
+
 contract UniswapArbitrage is IUniswapV2Callee {
     using SafeERC20 for IERC20;
 
@@ -21,6 +40,8 @@ contract UniswapArbitrage is IUniswapV2Callee {
      * Function performs two swaps:
      *         1. Swap DAI to WETH
      *         2. Swap WETH to DAI
+     @dev Here internal function _swap() is called to perform the arbitrage
+     * _swap() function is the main function that is performing the arbitrage which can be used in flashswap as well
      */
     function swap(
         address router0, // Uniswap DAI/WETH

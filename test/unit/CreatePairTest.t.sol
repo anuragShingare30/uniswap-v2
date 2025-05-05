@@ -9,6 +9,15 @@ import {IWeth} from "src/interfaces/IWeth.sol";
 import {IERC20} from "lib/openzeppelin-contracts/contracts/interfaces/IERC20.sol";
 import {MyToken} from "src/ERC20.sol";
 
+/**
+ * @title CreatePairTest
+ * @author anurag Shingare
+ * @notice This contract is testing the create pair function
+    1. createPair()
+    2. getPair()
+ * @dev If pair not exists for given pair of token, we will create the pair.
+ */
+
 contract CreatePairTest is Test {
     IWeth public constant weth = IWeth(WETH);
     IERC20 public constant dai = IERC20(DAI);

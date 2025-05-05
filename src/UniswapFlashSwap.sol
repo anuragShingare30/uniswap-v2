@@ -7,6 +7,18 @@ import {SafeERC20} from "lib/openzeppelin-contracts/contracts/token/ERC20/utils/
 import {DAI, WETH} from "src/constants.sol";
 import {IWeth} from "src/interfaces/IWeth.sol";
 
+
+/**
+ * @title UniswapFlashSwap contract
+ * @author anurag Shingare
+ 
+ * @dev We can borrow tokens from the pair contract by performing the flashswap
+ * @dev After performing specific task, we will repay the borrowed tokens with fee to pair contract
+ * This will be done in one transcation only!!!
+ */
+
+
+
 contract UniswapFlashSwap {
     using SafeERC20 for IERC20;
 

@@ -10,6 +10,15 @@ import {DAI, WETH, MKR, UNISWAP_V2_ROUTER_02, UNISWAP_V2_PAIR_DAI_WETH, UNISWAP_
 import {IWeth} from "src/interfaces/IWeth.sol";
 import {MyToken} from "src/ERC20.sol";
 
+
+/**
+ * @title AddLiquidityTest
+ * @author anurag Shingare
+ * @notice This contract is testing the add liquidity function for pair DAI-WETH and DAI-Token
+    1. addLiquidity()
+ */
+
+
 contract AddLiquidityTest is Test {
     IWeth public constant weth = IWeth(WETH);
     IERC20 public constant dai = IERC20(DAI);

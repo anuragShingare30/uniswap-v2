@@ -8,6 +8,17 @@ import {IUniswapV2Router02} from "lib/v2-periphery/contracts/interfaces/IUniswap
 import {IUniswapV2Pair} from "lib/v2-core/contracts/interfaces/IUniswapV2Pair.sol";
 import {DAI, WETH, MKR, UNISWAP_V2_ROUTER_02, UNISWAP_V2_PAIR_DAI_MKR} from "src/constants.sol";
 
+/**
+ * @title SwapContractTest
+ * @author anurag Shingare
+ * @notice This contract is testing the swap function for pair DAI-WETH and DAI-Token
+ * Here we will test the swap function:
+      1. swapExactTokensForTokens()
+      2. swapTokensForExactTokens()
+      3. getAmountsOut()
+      4. getAmountsIn()
+ */
+
 contract SwapContractTest is Test {
     IWeth public constant weth = IWeth(WETH);
     IERC20 public constant dai = IERC20(DAI);
