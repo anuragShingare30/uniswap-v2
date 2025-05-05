@@ -16,6 +16,7 @@ import {MyToken} from "src/ERC20.sol";
  * @author anurag Shingare
  * @notice This contract is testing the add liquidity function for pair DAI-WETH and DAI-Token
     1. addLiquidity()
+    2. getReserves()
  */
 
 

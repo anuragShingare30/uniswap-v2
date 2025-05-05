@@ -5,6 +5,18 @@
 - v2-core
 
 
+**Important function in uniswap-v2 protocol:**
+1. swapExactTokensForTokens()
+2. swapTokensForExactTokens()
+3. getAmountsOut()
+4. getAmountsIn()
+5. createPair()
+6. getPair()
+7. addLiquidity()
+8. removeLiquidity()
+9. flashSwap() / uniswapV2Call()
+
+
 
 # Constant Product Formula
 
